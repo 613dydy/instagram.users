@@ -1,4 +1,4 @@
-<!-- 🎯 完全再現 Instagram風 index.html -->
+<!-- 🎯 修正版 Instagram風 index.html（スマホ画像修正） -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -31,10 +31,14 @@
     @media (min-width: 900px) {
       .phone-image {
         display: block;
+        position: relative;
+        width: 380px;
+        height: 600px;
+        background: url('https://i.imgur.com/zXfS8zt.png') no-repeat center center;
+        background-size: cover;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.2);
       }
-    }
-    .phone-image img {
-      height: 600px;
     }
     .login-box {
       width: 350px;
@@ -115,9 +119,7 @@
 </head>
 <body>
   <div class="container">
-    <div class="phone-image">
-      <img src="https://www.instagram.com/static/images/homepage/home-phones.png/43cc71bb1b43.png" alt="Phone">
-    </div>
+    <div class="phone-image"></div>
 
     <div>
       <div class="login-box">
