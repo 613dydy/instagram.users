@@ -1,4 +1,4 @@
-<!-- 🎯 修正版 Instagram風 index.html（スマホ画像修正） -->
+<!-- 🎯 完全修正済み index.html（インスタ風スマホ画像） -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -31,13 +31,23 @@
     @media (min-width: 900px) {
       .phone-image {
         display: block;
-        position: relative;
         width: 380px;
-        height: 600px;
-        background: url('https://i.imgur.com/zXfS8zt.png') no-repeat center center;
+        height: 650px;
+        background-image: url('https://raw.githubusercontent.com/yunpirot/insta-clone-assets/main/phone-frame.png');
         background-size: cover;
-        border-radius: 20px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        background-position: center;
+        position: relative;
+      }
+      .phone-image::after {
+        content: "";
+        position: absolute;
+        top: 65px;
+        left: 41px;
+        width: 300px;
+        height: 533px;
+        background-image: url('https://raw.githubusercontent.com/yunpirot/insta-clone-assets/main/insta-feed.png');
+        background-size: cover;
+        background-position: center;
       }
     }
     .login-box {
