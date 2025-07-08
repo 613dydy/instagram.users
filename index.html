@@ -1,29 +1,111 @@
-<!-- 🌐 index.html（ログイン画面） -->
+<!-- 🎯 完全再現 Instagram風 index.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ログイン画面</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
   <script src="firebase-config.js"></script>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #000;
-      color: #fff;
-      font-family: sans-serif;
+      font-family: 'Roboto', sans-serif;
+      background-color: #fafafa;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      margin: 0;
+      gap: 40px;
     }
-    input, button {
+    .phone-image {
+      display: none;
+    }
+    @media (min-width: 900px) {
+      .phone-image {
+        display: block;
+      }
+    }
+    .phone-image img {
+      height: 600px;
+    }
+    .login-box {
+      width: 350px;
+      background-color: #fff;
+      border: 1px solid #dbdbdb;
+      padding: 40px;
+      text-align: center;
+    }
+    .login-box img.logo {
+      width: 175px;
+      margin-bottom: 20px;
+    }
+    .login-box input {
+      width: 100%;
       padding: 10px;
-      margin: 10px;
-      width: 250px;
+      margin-bottom: 10px;
+      border: 1px solid #dbdbdb;
+      background: #fafafa;
+    }
+    .login-box button {
+      width: 100%;
+      padding: 8px;
+      background-color: #0095f6;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 20px 0;
+    }
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #dbdbdb;
+    }
+    .divider span {
+      margin: 0 10px;
+      color: #999;
+    }
+    .fb-login {
+      color: #385185;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .forgot {
+      font-size: 12px;
+      color: #00376b;
+      margin-top: 10px;
+    }
+    .signup-box {
+      width: 350px;
+      border: 1px solid #dbdbdb;
+      background-color: #fff;
+      padding: 20px;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .store-buttons {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .store-buttons img {
+      height: 40px;
+      margin: 5px;
     }
     .error {
       color: red;
@@ -32,11 +114,35 @@
   </style>
 </head>
 <body>
-  <h2>ログイン</h2>
-  <div class="error" id="error"></div>
-  <input type="text" id="userId" placeholder="ユーザーID" />
-  <input type="password" id="password" placeholder="パスワード" />
-  <button onclick="login()">ログイン</button>
+  <div class="container">
+    <div class="phone-image">
+      <img src="https://www.instagram.com/static/images/homepage/home-phones.png/43cc71bb1b43.png" alt="Phone">
+    </div>
+
+    <div>
+      <div class="login-box">
+        <img src="https://www.instagram.com/static/images/web/logged_out_wordmark.png/7a252de00b20.png" class="logo" alt="Instagram">
+        <div class="error" id="error"></div>
+        <input type="text" id="userId" placeholder="電話番号、ユーザーネーム、またはメールアドレス">
+        <input type="password" id="password" placeholder="パスワード">
+        <button onclick="login()">ログイン</button>
+
+        <div class="divider"><span>または</span></div>
+
+        <div class="fb-login">Facebookでログイン</div>
+        <div class="forgot">パスワードを忘れた場合</div>
+      </div>
+
+      <div class="signup-box">
+        アカウントをお持ちでないですか？ <a href="#">登録する</a>
+      </div>
+
+      <div class="store-buttons">
+        <p>アプリをダウンロード</p>
+        <img src="https://www.instagram.com/static/images/appstore-install-badges/badge_jp.png/1582b4b4c6f2.png" alt="app">
+      </div>
+    </div>
+  </div>
 
   <script>
     function login() {
@@ -45,16 +151,14 @@
       const errorDiv = document.getElementById("error");
 
       if (!userId || !password) {
-        errorDiv.innerText = "IDとパスワードを入力してください";
+        errorDiv.innerText = "すべて入力してください";
         return;
       }
 
-      // 管理者IDとパスワード
       if (userId === "admin" && password === "ゆうぴろ") {
         localStorage.setItem("loginUser", "admin");
         window.location.href = "admin.html";
       } else {
-        // 一般ユーザー
         localStorage.setItem("loginUser", userId);
         window.location.href = "main.html";
       }
