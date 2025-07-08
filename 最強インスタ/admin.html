@@ -1,0 +1,62 @@
+<!-- 🔐 admin.html（全データ管理者ビュー） -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理者ページ</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
+  <style>
+    body {
+      background: #000;
+      color: #fff;
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    .user-block {
+      border: 1px solid #444;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+    .entry {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <h2>管理者ページ：全ユーザーデータ一覧</h2>
+  <div id="allData"></div>
+
+  <script>
+    const container = document.getElementById("allData");
+
+    db.collection("users").get().then(userSnapshots => {
+      userSnapshots.forEach(userDoc => {
+        const userId = userDoc.id;
+        const userBlock = document.createElement("div");
+        userBlock.className = "user-block";
+        userBlock.innerHTML = `<h3>${userId}</h3><div id="data-${userId}">読み込み中...</div>`;
+        container.appendChild(userBlock);
+
+        db.collection("users").doc(userId).collection("data").orderBy("timestamp", "desc").get()
+          .then(dataSnapshot => {
+            const dataDiv = document.getElementById(`data-${userId}`);
+            dataDiv.innerHTML = "";
+            dataSnapshot.forEach(doc => {
+              const d = doc.data();
+              const div = document.createElement("div");
+              div.className = "entry";
+              div.innerHTML = `<strong>${d.title}</strong><br><a href="${d.url}" target="_blank">${d.url}</a>`;
+              dataDiv.appendChild(div);
+            });
+            if (dataSnapshot.empty) {
+              dataDiv.innerText = "データなし";
+            }
+          });
+      });
+    });
+  </script>
+</body>
+</html>

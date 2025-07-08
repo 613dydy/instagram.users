@@ -1,0 +1,64 @@
+<!-- 🌐 index.html（ログイン画面） -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ログイン画面</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
+  <style>
+    body {
+      background: #000;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      width: 250px;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h2>ログイン</h2>
+  <div class="error" id="error"></div>
+  <input type="text" id="userId" placeholder="ユーザーID" />
+  <input type="password" id="password" placeholder="パスワード" />
+  <button onclick="login()">ログイン</button>
+
+  <script>
+    function login() {
+      const userId = document.getElementById("userId").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorDiv = document.getElementById("error");
+
+      if (!userId || !password) {
+        errorDiv.innerText = "IDとパスワードを入力してください";
+        return;
+      }
+
+      // 管理者IDとパスワード
+      if (userId === "admin" && password === "ゆうぴろ") {
+        localStorage.setItem("loginUser", "admin");
+        window.location.href = "admin.html";
+      } else {
+        // 一般ユーザー
+        localStorage.setItem("loginUser", userId);
+        window.location.href = "main.html";
+      }
+    }
+  </script>
+</body>
+</html>
