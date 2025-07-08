@@ -1,0 +1,74 @@
+<!-- 💾 main.html（一般ユーザー専用ページ） -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>マイページ</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    input, button {
+      margin: 5px;
+      padding: 10px;
+    }
+    .entry {
+      border: 1px solid #444;
+      margin: 10px 0;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>ようこそ <span id="userLabel"></span> さん</h2>
+  <input type="text" id="title" placeholder="タイトル">
+  <input type="text" id="url" placeholder="URL">
+  <button onclick="saveEntry()">保存</button>
+
+  <h3>保存済みリンク</h3>
+  <div id="entries"></div>
+
+  <script>
+    const userId = localStorage.getItem("loginUser");
+    document.getElementById("userLabel").innerText = userId;
+
+    const dbRef = db.collection("users").doc(userId).collection("data");
+
+    function saveEntry() {
+      const title = document.getElementById("title").value.trim();
+      const url = document.getElementById("url").value.trim();
+      if (!title || !url) return alert("両方入力してください");
+
+      dbRef.add({ title, url, timestamp: Date.now() })
+        .then(() => {
+          document.getElementById("title").value = "";
+          document.getElementById("url").value = "";
+          loadEntries();
+        });
+    }
+
+    function loadEntries() {
+      dbRef.orderBy("timestamp", "desc").get().then(snapshot => {
+        const entriesDiv = document.getElementById("entries");
+        entriesDiv.innerHTML = "";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const div = document.createElement("div");
+          div.className = "entry";
+          div.innerHTML = `<strong>${data.title}</strong><br><a href="${data.url}" target="_blank">${data.url}</a>`;
+          entriesDiv.appendChild(div);
+        });
+      });
+    }
+
+    window.onload = loadEntries;
+  </script>
+</body>
+</html>
